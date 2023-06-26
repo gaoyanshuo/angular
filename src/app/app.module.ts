@@ -13,7 +13,7 @@ import { HomeComponent } from './components/home/home.component';
 import { HeaderComponent } from './components/header/header.component';
 import { ReserveFormComponent } from './components/reserve-form/reserve-form.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { FormsModule }   from '@angular/forms';//for ngModel
+import { FormsModule, ReactiveFormsModule }   from '@angular/forms';//for ngModel
 
 /*@NgModule装饰器, @NgModule接受一个元数据对象，告诉 Angular 如何编译和启动应用*/
 @NgModule({
@@ -24,7 +24,8 @@ import { FormsModule }   from '@angular/forms';//for ngModel
     BrowserModule,
     AppRoutingModule,
     NgbModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],/*配置项目所需要的服务*/
   bootstrap: [AppComponent]  /* 指定应用的主视图（称为根组件） 通过引导根AppModule来启动应用  ，这里一般写的是根组件*/

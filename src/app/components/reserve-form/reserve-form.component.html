@@ -1,5 +1,5 @@
 <div class="mt-1" style="border: 1px black solid;">
-  <h1>reserve-Form</h1>
+  <h1>reserve-Form---ngModel</h1>
   <ul>
     <li>Name: <input [(ngModel)]="reserveInfo.name" type="text"></li>
     <li>
@@ -12,15 +12,15 @@
     <li>PWD: <input [(ngModel)]="reserveInfo.password" type="password"></li>
     <li>Mail: <input [(ngModel)]="reserveInfo.email" type="text"></li>
     <li>
-      City: 
+      City:
       <select [(ngModel)]="reserveInfo.city" name="" id="">
         <option *ngFor="let city of cityList" [value]="city">{{city}}</option>
       </select>
     </li>
     <li>
-      Hobby: 
+      Hobby:
       <span *ngFor="let hobby of reserveInfo.hobbies">
-        <input [(ngModel)]="hobby.checked" [id]="hobby.key" type="checkbox" [value]="hobby.value" [name]="hobby.key" >
+        <input [(ngModel)]="hobby.checked" [id]="hobby.key" type="checkbox" [value]="hobby.value" [name]="hobby.key">
         <label [for]="hobby.key">{{hobby.value}}</label>
       </span>
     </li>
@@ -28,4 +28,63 @@
   <button (click)="ngModelSubmit()">ngModelSubmit</button>
   <br>
   <pre>{{reserveInfo | json}}</pre>
+</div>
+
+<hr><br>
+
+<div class="mt-1" style="border: 1px black solid;">
+  <h1>reserve-Form---FormGroup</h1>
+  <form [formGroup]="reserveInfoGroup" (submit)="formGroupSubmit()">
+    <ul>
+      <li>
+        <div formGroupName="name">
+          Name:
+          <input formControlName="firstName" type="text">
+          <input formControlName="lastName" type="text">
+        </div>
+      </li>
+      <li>
+        Gender:
+        <input formControlName="gender" type="radio" value="1" name="gender" id="male">
+        <label for="male">Male</label>
+        <input formControlName="gender" type="radio" value="2" name="gender" id="female">
+        <label for="female">Female</label>
+      </li>
+      <li>PWD: <input formControlName="password" type="password"></li>
+      <li>Mail: <input formControlName="email" type="text"></li>
+      <li>
+        City:
+        <select formControlName="city" name="" id="">
+          <option *ngFor="let city of cityList" [value]="city">{{city}}</option>
+        </select>
+      </li>
+      <!-- <li>
+        Hobby: 
+        <span *ngFor="let hobby of reserveInfo.hobbies">
+          <input  [id]="hobby.key" type="checkbox" [value]="hobby.value" [name]="hobby.key" >
+          <label [for]="hobby.key">{{hobby.value}}</label>
+        </span>
+      </li> -->
+      <li>
+        Contract:
+        <div formArrayName="contract">
+          <!-- formGroupName 
+            contracts:{
+              controls:[0: FormGroup, 1: FormGroup, 2: FormGroup],
+              error: null,
+              status: 'VALID'
+          } -->
+          <div *ngFor="let contract of contracts.controls; let i = index" [formGroupName]="i">
+            <input formControlName="tel" type="text">
+            <input formControlName="addr" type="text">
+            <button (click)="removeContract(i)">delete</button>
+          </div>
+        </div>
+      </li>
+    </ul>
+    <button (click)="addContract()">addContract</button>
+    <button>formGroupSubmit</button>
+    <br>
+    <pre>{{reserveInfoGroup.value | json}}</pre>
+  </form>
 </div>
