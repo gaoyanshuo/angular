@@ -6,11 +6,13 @@ import { FormGroup, FormControl, FormArray } from '@angular/forms';
   styleUrls: ['./reserve-form.component.scss'],
 })
 export class ReserveFormComponent {
+  constructor() {}
+
   ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
     this.addContract();
+    // this.buildCityList();
   }
+
   // ngModel
   reserveInfo: any = {
     name: '',
@@ -26,6 +28,12 @@ export class ReserveFormComponent {
   };
 
   // FormGroup FormArray
+  hobbies: any[] = [
+    { key: 'food', value: '吃饭' },
+    { key: 'sleep', value: '睡觉' },
+    { key: 'doudou', value: '打豆豆' },
+  ];
+
   reserveInfoGroup: FormGroup = new FormGroup({
     name: new FormGroup({
       firstName: new FormControl(),
@@ -33,18 +41,14 @@ export class ReserveFormComponent {
     }),
     gender: new FormControl(),
     city: new FormControl(),
-    // hobbies: new FormArray([
-    //   { key: 'food', value: '吃饭', checked: false },
-    //   { key: 'sleep', value: '睡觉', checked: false },
-    //   { key: 'doudou', value: '打豆豆', checked: false },
-    // ]),
+    hobbies: new FormArray(this.buildCityList()),
     password: new FormControl(),
     email: new FormControl(),
     contract: new FormArray([]),
   });
   cityList: any[] = ['Tokyo', 'Kanagawa', 'Chiba'];
 
-  get hobbies() {
+  get hobby() {
     return this.reserveInfoGroup.get('hobbies') as FormArray;
   }
 
@@ -79,10 +83,26 @@ export class ReserveFormComponent {
     });
     this.contracts.push(contract);
   }
+
   /**
    * 动态删除FormArray
    */
   removeContract(i: any) {
     this.contracts.removeAt(i);
+  }
+
+  /**
+   * build mul checkbox FormControl
+   */
+  buildCityList() {
+    // A:
+    // const hobbiesList: any = this.hobbies
+    //   .map(() => new FormControl(false))
+    //   .map((e, i) => this.hobby.setControl(i, e));
+    // console.log('hobbiesList', hobbiesList);
+    // console.log('hobby', this.hobby);
+
+    // B: 
+    return this.hobbies.map(() => new FormControl(false))
   }
 }

@@ -1,3 +1,4 @@
+<!-- ngModel -->
 <div class="mt-1" style="border: 1px black solid;">
   <h1>reserve-Form---ngModel</h1>
   <ul>
@@ -32,6 +33,7 @@
 
 <hr><br>
 
+<!-- FormGroup FormArray -->
 <div class="mt-1" style="border: 1px black solid;">
   <h1>reserve-Form---FormGroup</h1>
   <form [formGroup]="reserveInfoGroup" (submit)="formGroupSubmit()">
@@ -58,13 +60,14 @@
           <option *ngFor="let city of cityList" [value]="city">{{city}}</option>
         </select>
       </li>
-      <!-- <li>
-        Hobby: 
-        <span *ngFor="let hobby of reserveInfo.hobbies">
-          <input  [id]="hobby.key" type="checkbox" [value]="hobby.value" [name]="hobby.key" >
-          <label [for]="hobby.key">{{hobby.value}}</label>
-        </span>
-      </li> -->
+      <li>
+        Hobby:
+        <div formArrayName="hobbies" *ngFor="let item of hobby.controls; let i = index">
+          <label>
+            <input [formControlName]="i" type="checkbox" [id]="hobbies[i].key">{{hobbies[i].value}}
+          </label>
+        </div>
+      </li>
       <li>
         Contract:
         <div formArrayName="contract">
