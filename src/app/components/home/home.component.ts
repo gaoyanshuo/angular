@@ -6,5 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-
+  conditionExpression = 1;
+  colorFlg: boolean = true;
+  attr: string = 'pink';
 }
