@@ -68,9 +68,16 @@
       </li>
       <li>
         Hobby:
-        <div formArrayName="hobbies" *ngFor="let item of hobby.controls; let i = index">
+        <!-- <div formArrayName="hobbies" *ngFor="let item of hobby.controls; let i = index">
           <label>
-            <input [formControlName]="i" type="checkbox" [id]="hobbies[i].key">{{hobbies[i].value}}
+            <input [formControlName]="i" type="checkbox">{{hobbies[i].value}}
+          </label>
+        </div> -->
+        
+        <!-- 动态添加，删除checkbox中的FormControl -->
+        <div formArrayName="hobbies">
+          <label *ngFor="let hobby of hobbies">
+            <input (change)="onCheckboxChange($event)" type="checkbox" [value]="hobby.key">{{hobby.value}}
           </label>
         </div>
       </li>

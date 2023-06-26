@@ -1,5 +1,12 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormControl, FormArray, Validators, AbstractControl } from '@angular/forms';
+import {
+  FormGroup,
+  FormControl,
+  FormArray,
+  Validators,
+  AbstractControl,
+  FormBuilder,
+} from '@angular/forms';
 import { MyValidators } from 'src/app/myValidators';
 @Component({
   selector: 'app-reserve-form',
@@ -7,7 +14,14 @@ import { MyValidators } from 'src/app/myValidators';
   styleUrls: ['./reserve-form.component.scss'],
 })
 export class ReserveFormComponent {
-  constructor() {}
+  constructor(private fb: FormBuilder) {
+    this.contractForm = this.fb.group({
+      fullName: this.fb.group({
+        firstName: ['', Validators.required],
+        lastName: [''],
+      }),
+    });
+  }
 
   ngOnInit(): void {
     this.addContract();
@@ -35,14 +49,23 @@ export class ReserveFormComponent {
     { key: 'doudou', value: '打豆豆' },
   ];
 
+  // FormBuilder
+  // this.fb.control -> FormControl
+  // this.fb.group -> FormGroup
+  // this.fb.array => FormArray
+  contractForm: FormGroup;
+
   reserveInfoGroup: FormGroup = new FormGroup({
     name: new FormGroup({
-      firstName: new FormControl('', [Validators.required, MyValidators.cannotContainSpace]),
+      firstName: new FormControl('', [
+        Validators.required,
+        MyValidators.cannotContainSpace,
+      ]),
       lastName: new FormControl(),
     }),
     gender: new FormControl(),
     city: new FormControl(),
-    hobbies: new FormArray(this.buildCityList()),
+    hobbies: new FormArray([]),
     password: new FormControl(),
     email: new FormControl(),
     contract: new FormArray([]),
@@ -70,7 +93,7 @@ export class ReserveFormComponent {
 
   // customerise validators
   static cannotContainSpace(control: AbstractControl) {
-    if (/\s/.test(control.value)) return {cannotContainSpace :true}
+    if (/\s/.test(control.value)) return { cannotContainSpace: true };
     return null;
   }
 
@@ -121,5 +144,21 @@ export class ReserveFormComponent {
 
     // B:
     return this.hobbies.map(() => new FormControl(false));
+  }
+
+  /**
+   * 动态添加，删除checkbox中的FormControl
+   * @param e $event
+   */
+  onCheckboxChange(e: any) {
+    const value = e.target.value;
+    if (e.target.checked) {
+      this.hobby.push(new FormControl(value));
+    } else {
+      // find index
+      const index = this.hobby.controls.findIndex((e) => e.value === value);
+      this.hobby.removeAt(index);
+    }
+    console.log('hobby', this.hobby);
   }
 }
