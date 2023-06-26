@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormControl, FormArray } from '@angular/forms';
+import { FormGroup, FormControl, FormArray, Validators, AbstractControl } from '@angular/forms';
+import { MyValidators } from 'src/app/myValidators';
 @Component({
   selector: 'app-reserve-form',
   templateUrl: './reserve-form.component.html',
@@ -36,7 +37,7 @@ export class ReserveFormComponent {
 
   reserveInfoGroup: FormGroup = new FormGroup({
     name: new FormGroup({
-      firstName: new FormControl(),
+      firstName: new FormControl('', [Validators.required, MyValidators.cannotContainSpace]),
       lastName: new FormControl(),
     }),
     gender: new FormControl(),
@@ -55,6 +56,22 @@ export class ReserveFormComponent {
   // get contract FormArray
   get contracts() {
     return this.reserveInfoGroup.get('contract') as FormArray;
+  }
+
+  // get contract FormArray
+  get firstName() {
+    return this.reserveInfoGroup.get(['name', 'firstName'])!;
+  }
+
+  // get contract FormArray
+  get lastName() {
+    return this.reserveInfoGroup.get(['name', 'lastName'])!;
+  }
+
+  // customerise validators
+  static cannotContainSpace(control: AbstractControl) {
+    if (/\s/.test(control.value)) return {cannotContainSpace :true}
+    return null;
   }
 
   /**
@@ -102,7 +119,7 @@ export class ReserveFormComponent {
     // console.log('hobbiesList', hobbiesList);
     // console.log('hobby', this.hobby);
 
-    // B: 
-    return this.hobbies.map(() => new FormControl(false))
+    // B:
+    return this.hobbies.map(() => new FormControl(false));
   }
 }

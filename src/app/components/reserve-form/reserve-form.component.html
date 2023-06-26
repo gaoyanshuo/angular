@@ -42,6 +42,12 @@
         <div formGroupName="name">
           Name:
           <input formControlName="firstName" type="text">
+          <ng-container *ngIf="firstName?.touched && firstName?.invalid && firstName?.errors?.['required']">
+            <span class="text-danger">required</span>
+          </ng-container>
+          <ng-container *ngIf="firstName?.touched && firstName?.invalid && firstName?.errors?.['cannotContainSpace']">
+            <span class="text-danger">cannotContainSpace</span>
+          </ng-container>
           <input formControlName="lastName" type="text">
         </div>
       </li>
@@ -86,7 +92,7 @@
       </li>
     </ul>
     <button (click)="addContract()">addContract</button>
-    <button>formGroupSubmit</button>
+    <button [disabled]="reserveInfoGroup.invalid">formGroupSubmit</button>
     <br>
     <pre>{{reserveInfoGroup.value | json}}</pre>
   </form>
