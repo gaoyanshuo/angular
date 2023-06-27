@@ -25,6 +25,7 @@ export class ReserveFormComponent {
 
   ngOnInit(): void {
     this.addContract();
+    this.valueChange();
     // this.buildCityList();
   }
 
@@ -97,6 +98,12 @@ export class ReserveFormComponent {
     return null;
   }
 
+  // setValue pathcValue valueChnage
+  valueInfo: FormGroup = this.fb.group({
+    firstName: [''],
+    lastName: [''],
+  });
+
   /**
    * ngModel Submit
    */
@@ -160,5 +167,38 @@ export class ReserveFormComponent {
       this.hobby.removeAt(index);
     }
     console.log('hobby', this.hobby);
+  }
+
+  setValue() {
+    this.valueInfo.setValue({
+      firstName: 'ss',
+      lastName: 'dd',
+    });
+  }
+
+  patchValue() {
+    this.valueInfo.patchValue({
+      firstName: 'aaa',
+    });
+  }
+
+  /**
+   * valueChange
+   * value: value
+   */
+  valueChange() {
+    this.valueInfo.get('firstName')?.valueChanges.subscribe((value) => {
+      console.log('fitstName', value);
+    });
+    this.valueInfo.get('lastName')?.valueChanges.subscribe((value) => {
+      console.log('lastName', value);
+    });
+  }
+
+  /**
+   * reset FormGroup
+   */
+  resetFormGroup() {
+    this.valueInfo.reset();
   }
 }

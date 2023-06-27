@@ -73,7 +73,7 @@
             <input [formControlName]="i" type="checkbox">{{hobbies[i].value}}
           </label>
         </div> -->
-        
+
         <!-- 动态添加，删除checkbox中的FormControl -->
         <div formArrayName="hobbies">
           <label *ngFor="let hobby of hobbies">
@@ -102,5 +102,20 @@
     <button [disabled]="reserveInfoGroup.invalid">formGroupSubmit</button>
     <br>
     <pre>{{reserveInfoGroup.value | json}}</pre>
+  </form>
+</div>
+
+<hr><br>
+
+<!-- setValue patchValue valueChange -->
+<div class="mt-1" style="border: 1px black solid;">
+  <h1>setValue---patchValue---valueChange</h1>
+  <form [formGroup]="valueInfo">
+    <ul>
+      <li><input formControlName="firstName" type="text"></li>
+      <li><input formControlName="lastName" type="text"></li>
+      <li><button (click)="setValue()">setValue</button> <button (click)="patchValue()">patchValue</button></li>
+      <li><button (click)="resetFormGroup()">resetFormGroup</button></li>
+    </ul>
   </form>
 </div>
