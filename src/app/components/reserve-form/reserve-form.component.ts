@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import {
   FormGroup,
   FormControl,
@@ -14,6 +14,8 @@ import { MyValidators } from 'src/app/myValidators';
   styleUrls: ['./reserve-form.component.scss'],
 })
 export class ReserveFormComponent {
+  @ViewChild('side') side: any;
+
   constructor(private fb: FormBuilder) {
     this.contractForm = this.fb.group({
       fullName: this.fb.group({
@@ -201,4 +203,17 @@ export class ReserveFormComponent {
   resetFormGroup() {
     this.valueInfo.reset();
   }
+
+  runReserveTest() {
+    console.log('this is runReserveTest in reserveForm-Component');
+  }
+
+  showSide() {
+    this.side.nativeElement.style.transform = "translate(0, 0)"
+  }
+
+  hideSide() {
+    this.side.nativeElement.style.transform = "translate(100%, 0)"
+  }
+
 }

@@ -9,5 +9,11 @@ li {
   list-style: none;
 }
 
+body {
+  overflow-x: hidden;
+  width: 100%;
+  height: auto
+}
+
 /* Importing Bootstrap SCSS file. */
 @import 'bootstrap/scss/bootstrap';

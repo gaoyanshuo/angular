@@ -1,5 +1,7 @@
 <!-- ngModel -->
 <div class="mt-1" style="border: 1px black solid;">
+  <button (click)="showSide()">showSide</button>
+  <button (click)="hideSide()">hideSide</button>
   <h1>reserve-Form---ngModel</h1>
   <ul>
     <li>Name: <input [(ngModel)]="reserveInfo.name" type="text"></li>
@@ -118,4 +120,8 @@
       <li><button (click)="resetFormGroup()">resetFormGroup</button></li>
     </ul>
   </form>
+</div>
+
+<div class="side" #side>
+  side side side
 </div>
