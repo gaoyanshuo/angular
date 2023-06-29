@@ -1,4 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
+// Output, EventEmitter : 子传父用  @viewChild也可
+import { Component, ViewChild, Output, EventEmitter } from '@angular/core';
 import {
   FormGroup,
   FormControl,
@@ -15,7 +16,8 @@ import { MyValidators } from 'src/app/myValidators';
 })
 export class ReserveFormComponent {
   @ViewChild('side') side: any;
-
+  // 子传父
+  @Output() outer = new EventEmitter();
   constructor(private fb: FormBuilder) {
     this.contractForm = this.fb.group({
       fullName: this.fb.group({
@@ -209,11 +211,16 @@ export class ReserveFormComponent {
   }
 
   showSide() {
-    this.side.nativeElement.style.transform = "translate(0, 0)"
+    this.side.nativeElement.style.transform = 'translate(0, 0)';
   }
 
   hideSide() {
-    this.side.nativeElement.style.transform = "translate(100%, 0)"
+    this.side.nativeElement.style.transform = 'translate(100%, 0)';
+  }
+
+  runChildFuc() {
+    this.outer.emit('i am child component function')
+    alert('i am child component function');
   }
 
 }

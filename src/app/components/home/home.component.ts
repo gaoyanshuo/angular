@@ -31,4 +31,9 @@ export class HomeComponent {
     // run child Component function
     this.receiveForm.runReserveTest();
   }
+
+  runChildFuc(e: any) {
+    console.log('e', e);
+  }
+
 }
