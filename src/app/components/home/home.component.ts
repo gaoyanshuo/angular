@@ -15,11 +15,20 @@ export class HomeComponent {
   @ViewChild('receiveForm') receiveForm: any;
 
   constructor(reqService: RequestService) {
-    console.log('getData', reqService.getData());
+    console.log('getData', reqService.getData());  // 同步
+
     reqService.getCallbackData((data: any) => console.log('getCallbackData', data)); // callback获取异步数据
+
     reqService.getPromiseData().then((res) => console.log('getPromiseData', res)); // promise获取异步数据
     const stream = reqService.getRxjsData().subscribe((res) => console.log('getRxjsData', res)) //rxjs获取异步数据
-    stream.unsubscribe() //rxjs取消订阅（取消异步方法的执行）(取消订阅需要用subscribe的返回值来取消)
+    setTimeout(() => {
+      stream.unsubscribe() //rxjs取消订阅（取消异步方法的执行）(取消订阅需要用subscribe的返回值来取消)
+    }, 2001);
+
+    // promise多次执行(没有这个能力)
+    reqService.getPromiseSetIntervalData().then((res) => console.log('getPromiseSetIntervalData', res));
+    // Rxjs多次执行
+    reqService.getRxjsSetIntervalData().subscribe((res) => console.log('getRxjsSetIntervalData', res));
   }
 
   ngOnInit(): void {
