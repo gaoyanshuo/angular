@@ -121,9 +121,9 @@ export class RequestService {
       let id: any = '';
       id = setInterval(() => {
         num++;
-        if (num > 2) clearInterval(id);
         observable.next(num);
         observable.next(num + 10086);
+        if (num > 2) clearInterval(id);
       }, 1000);
     });
   }

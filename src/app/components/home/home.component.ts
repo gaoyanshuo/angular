@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { RequestService } from 'src/app/services/request.service';
+import { filter, map } from 'rxjs/operators';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -29,12 +30,19 @@ export class HomeComponent {
     reqService.getPromiseSetIntervalData().then((res) => console.log('getPromiseSetIntervalData', res));
     // Rxjs多次执行
     reqService.getRxjsSetIntervalData().subscribe((res) => console.log('getRxjsSetIntervalData', res));
+
+    // Rxjs 工具方法 (pipe, map, filter)
+    reqService.getRxjsSetIntervalData()
+      .pipe(
+        filter((value: any) => value % 2 === 0 ? true : false)
+      ).pipe(
+        map((value: number) => value * 2)
+      ).subscribe((res) => console.log('getRxjsSetIntervalData--filter', res));
   }
 
-  ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
-  }
+  
+
+  ngOnInit(): void {}
 
   /**
    * 视图加载完成以后触发的方法 dom加载完成 (建议把dom操作放在这里)
