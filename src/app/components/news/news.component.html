@@ -1,3 +1,9 @@
 <app-header></app-header>
-<h1>{{title}}</h1>
-<span [innerHTML]='content' class="red"></span>
+
+<div class="mb-3" style="border: 1px #000 solid;">
+    <h1>{{title}}</h1>
+    <span [innerHTML]='content' class="red"></span>
+    <button type="button" (click)="getData()">Get Request</button>
+    <button type="button" (click)="getDataByAxios()">getDataByAxios</button>
+</div>
+
