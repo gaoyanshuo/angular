@@ -1,18 +1,19 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import axios from 'axios';
 import { Observable } from 'rxjs';
+
 @Injectable({
   providedIn: 'root',
 })
 export class HttpService {
-  constructor() {}
+  constructor(@Inject('Axios') private axios: any) {}
 
   axiosGet(api: string): Promise<any> {
     // promise处理异步
     return new Promise((resolve, reject) => {
-      axios
+      this.axios
         .get(api)
-        .then((res) => {
+        .then((res: any) => {
           resolve(res);
         })
         .catch(() => {});

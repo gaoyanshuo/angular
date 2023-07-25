@@ -8,7 +8,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 // jsonP 跨域的一种解决方案
 import { HttpClientJsonpModule } from '@angular/common/http';
-
+import axios from 'axios';
 //根组件
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -34,7 +34,7 @@ import { HttpService } from './services/http.service';
     HttpClientModule,
     HttpClientJsonpModule
   ],
-  providers: [RequestService, HttpService],/*配置项目所需要的服务*/
+  providers: [RequestService, HttpService,{ provide: 'Axios', useValue: axios } ],/*配置项目所需要的服务*/
   bootstrap: [AppComponent]  /* 指定应用的主视图（称为根组件） 通过引导根AppModule来启动应用  ，这里一般写的是根组件*/
 })
 
