@@ -38,14 +38,8 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             echo "========== 开始部署 =========="
-            cd /home/aaascloud
-
-            if [ ! -d "angular" ]; then
-              git clone https://github.com/gaoyanshuo/angular.git
-            fi
-
-            cd angular
+            cd /home/aaascloud/angular
             git pull origin main
             npm ci
-            npm run build
+            npx ng build
             echo "========== 部署完成 =========="
