@@ -1,4 +1,4 @@
-name: CI Pipeline
+name: CI/CD Pipeline
 
 on:
   push:
@@ -9,7 +9,6 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -25,3 +24,28 @@ jobs:
 
       - name: Build
         run: npm run build
+
+  deploy:
+    needs: build-and-test
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            echo "========== 开始部署 =========="
+            cd /home/aaascloud
+
+            if [ ! -d "angular" ]; then
+              git clone https://github.com/gaoyanshuo/angular.git
+            fi
+
+            cd angular
+            git pull origin main
+            npm ci
+            npm run build
+            echo "========== 部署完成 =========="
