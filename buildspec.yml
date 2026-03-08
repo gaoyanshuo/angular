@@ -1,5 +1,10 @@
 version: 0.2
 
+env:
+  shell: bash
+  variables:
+    ECR_REPO_NAME: angular-demo-web
+
 phases:
   install:
     runtime-versions:
@@ -13,17 +18,26 @@ phases:
           npm install
         fi
 
+  pre_build:
+    commands:
+      - echo "Preparing ECR login"
+      - ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+      - REGION=${AWS_DEFAULT_REGION}
+      - COMMIT_SHA=$(echo "${CODEBUILD_RESOLVED_SOURCE_VERSION}" | cut -c1-7)
+      - IMAGE_TAG=${COMMIT_SHA:-latest}
+      - ECR_REPO_URI="${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/${ECR_REPO_NAME}"
+      - echo "ECR repo URI: ${ECR_REPO_URI}"
+      - aws ecr get-login-password --region "${REGION}" | docker login --username AWS --password-stdin "${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com"
+
   build:
     commands:
       - echo "Building Angular app"
       - npm run build
-      - echo "Listing dist output"
-      - ls -R dist || true
       - echo "Preparing deploy artifact"
       - rm -rf artifact
       - mkdir -p artifact
       - |
-        INDEX_FILE="$(find dist -maxdepth 4 -type f -name index.html | head -n 1)"
+        INDEX_FILE="$(find dist -maxdepth 5 -type f -name index.html | head -n 1)"
         if [ -z "$INDEX_FILE" ]; then
           echo "Could not detect Angular build output under dist/"
           exit 1
@@ -31,6 +45,19 @@ phases:
         BUILD_DIR="$(dirname "$INDEX_FILE")"
         echo "Detected build dir: $BUILD_DIR"
         cp -R "$BUILD_DIR"/. artifact/
+      - |
+        printf '{"commit":"%s","image":"%s:%s","builtAt":"%s"}' \
+        "$COMMIT_SHA" \
+        "$ECR_REPO_URI" \
+        "$IMAGE_TAG" \
+        "$(date -u +%FT%TZ)" > artifact/version.json
+      - echo "Building Docker image"
+      - docker build -t "${ECR_REPO_URI}:${IMAGE_TAG}" .
+
+  post_build:
+    commands:
+      - echo "Pushing Docker image to ECR"
+      - docker push "${ECR_REPO_URI}:${IMAGE_TAG}"
 
 artifacts:
   base-directory: artifact
