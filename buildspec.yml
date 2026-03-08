@@ -1,0 +1,38 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 20
+    commands:
+      - echo "Installing dependencies"
+      - |
+        if [ -f package-lock.json ]; then
+          npm ci
+        else
+          npm install
+        fi
+
+  build:
+    commands:
+      - echo "Building Angular app"
+      - npm run build
+      - echo "Listing dist output"
+      - ls -R dist || true
+      - echo "Preparing deploy artifact"
+      - rm -rf artifact
+      - mkdir -p artifact
+      - |
+        INDEX_FILE="$(find dist -maxdepth 4 -type f -name index.html | head -n 1)"
+        if [ -z "$INDEX_FILE" ]; then
+          echo "Could not detect Angular build output under dist/"
+          exit 1
+        fi
+        BUILD_DIR="$(dirname "$INDEX_FILE")"
+        echo "Detected build dir: $BUILD_DIR"
+        cp -R "$BUILD_DIR"/. artifact/
+
+artifacts:
+  base-directory: artifact
+  files:
+    - '**/*'
